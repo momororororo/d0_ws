@@ -1,0 +1,70 @@
+<robot name="test_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="side" value="0.05" />
+  <xacro:property name="x" value="0.1" />
+  <xacro:property name="height" value="0.8" />
+  <xacro:property name="wheel_l" value="0.05" />
+  <xacro:property name="wheel_r" value="0.3" />
+
+
+  <link name="body_link"> 
+    <visual>
+      <geometry>
+        <box size="${x} ${side} ${height}"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="upper_body_link"> 
+    <visual>
+      <geometry>
+        <box size="${x} ${4*wheel_l} ${x}"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="middle_wheel"> 
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_l*2}" radius="${wheel_r*0.98}"/> 
+      </geometry>
+    </visual>
+  </link>
+  <link name="left_wheel"> 
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_l}" radius="${wheel_r}"/> 
+      </geometry>
+    </visual>
+  </link>
+  <link name="right_wheel"> 
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_l}" radius="${wheel_r}"/> 
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="upper_body_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <parent link="body_link"/>
+    <child link="upper_body_link"/>
+    <origin rpy="0 0 0" xyz="0  ${0.5*side+2*wheel_l} ${0.5*(height-x)}"/>
+  </joint>
+  <joint name="body_joint" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="body_link"/>
+    <child link="middle_wheel"/>
+    <origin rpy="-1.5708 0 0" xyz="0. ${2*wheel_l+0.5*side} ${-0.5*height+x}"/>
+  </joint>
+  <joint name="left_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="middle_wheel"/>
+    <child link="left_wheel"/>
+    <origin rpy="0 0 0" xyz="0. 0 ${-1.5*wheel_l}"/>
+  </joint>
+  <joint name="right_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="middle_wheel"/>
+    <child link="right_wheel"/>
+    <origin rpy="0 0 0" xyz="0. 0 ${1.5*wheel_l}"/>
+  </joint>
+
+</robot>
